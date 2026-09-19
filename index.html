@@ -1,0 +1,333 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Wanderlens — Editorial Gallery</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet"><style>
+:root{--cream:#f4eee3;--paper:#ebe1d0;--navy:#0b315d;--navy2:#071d36;--ember:#d95430;--brown:#39291d;--tan:#b28a58;--muted:#756b60;--line:rgba(57,41,29,.18);--white:#fffaf1;--ease:cubic-bezier(.2,.75,.2,1)}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth;background:var(--cream)}body{background:var(--cream);color:var(--brown);font-family:'Work Sans',Arial,sans-serif;line-height:1.55;overflow-x:hidden}body:before{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;background:radial-gradient(circle at 20% 20%,rgba(255,255,255,.22),transparent 35%);mix-blend-mode:soft-light}a{color:inherit;text-decoration:none}img{display:block;width:100%}button{font:inherit}::selection{background:var(--ember);color:var(--white)}
+.grain{position:fixed;inset:-60px;z-index:1000;pointer-events:none;opacity:.045;mix-blend-mode:multiply;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+.cursor-pill{position:fixed;top:0;left:0;z-index:1001;pointer-events:none;display:flex;align-items:center;gap:6px;background:var(--ember);color:var(--white);font:600 11px 'Work Sans';padding:9px 16px;border-radius:30px;white-space:nowrap;opacity:0;transform:translate3d(-50%,-50%,0) scale(.7);transition:opacity .18s ease,transform .18s ease}.cursor-pill.show{opacity:1;transform:translate3d(-50%,-50%,0) scale(1)}@media(hover:none){.cursor-pill{display:none!important}}
+.back-top{position:fixed;right:24px;bottom:24px;z-index:400;width:46px;height:46px;border-radius:50%;background:var(--navy);color:var(--white);border:0;font-size:16px;cursor:pointer;opacity:0;pointer-events:none;transform:translateY(10px);transition:.3s var(--ease);display:grid;place-items:center}.back-top.show{opacity:1;pointer-events:auto;transform:none}.back-top:hover{background:var(--ember)}
+.see-all{display:none;align-items:center;gap:8px;font:600 10px 'Work Sans';letter-spacing:.08em;text-transform:uppercase;color:var(--brown);border:0;border-bottom:1px solid var(--line);padding-bottom:6px;background:none;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:.25s}.see-all:hover{color:var(--ember);border-color:var(--ember)}.see-all .arrow{transition:transform .2s}.see-all:hover .arrow{transform:translateX(3px)}
+.lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,250,241,.3);background:rgba(255,250,241,.06);color:var(--cream);font-size:20px;cursor:pointer;display:grid;place-items:center;transition:.2s}.lightbox-nav:hover{background:var(--ember);border-color:var(--ember)}.lightbox-prev{left:20px}.lightbox-next{right:20px}
+@media(max-width:640px){.lightbox-nav{width:38px;height:38px;font-size:16px}.lightbox-prev{left:8px}.lightbox-next{right:8px}.back-top{right:16px;bottom:16px;width:40px;height:40px}}
+h1,h2,h3,.display,.nav-brand{font-family:'Fraunces',Georgia,serif;font-weight:500;letter-spacing:-.04em}.nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:22px 4.5vw;display:flex;align-items:center;justify-content:space-between;transition:.4s var(--ease)}.nav.scrolled{padding:12px 4.5vw;background:rgba(244,238,227,.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.nav-brand{font-size:23px}.nav-brand:before{content:'W';display:inline-grid;place-items:center;width:27px;height:27px;border:1px solid var(--navy);border-radius:50%;font:10px 'Work Sans';color:var(--navy);margin-right:10px;vertical-align:2px}.nav-links{display:flex;gap:27px;align-items:center;font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase}.nav-links a{color:var(--muted);position:relative;padding:7px 0}.nav-links a:after{content:'';position:absolute;left:0;right:100%;bottom:1px;height:1px;background:var(--ember);transition:.3s var(--ease)}.nav-links a:hover,.nav-links a.active{color:var(--brown)}.nav-links a:hover:after,.nav-links a.active:after{right:0}.nav-cta{background:var(--navy);color:var(--white)!important;padding:10px 16px!important;border-radius:99px}.nav-cta:hover{background:var(--ember)}.nav-toggle{display:none}
+.hero{min-height:100svh;padding:120px 4.5vw 50px;display:grid;grid-template-columns:.72fr 1.28fr;gap:5vw;align-items:end}.hero-bg{position:relative;order:2;height:min(72vh,690px);min-height:470px;background:var(--paper);overflow:hidden}.hero-bg:after{content:'01  /  FEATURED';position:absolute;bottom:18px;left:18px;background:var(--cream);padding:10px 13px;font:9px 'Work Sans';letter-spacing:.08em;color:var(--ember)}.hero-bg{background-size:cover;background-position:center}.hero-content{order:1;padding-bottom:2vw}.hero-eyebrow,.section-kicker{display:flex;align-items:center;gap:10px;color:var(--ember);font:500 10px 'Work Sans';letter-spacing:.12em;text-transform:uppercase}.hero-eyebrow:before{content:'';width:25px;height:1px;background:var(--ember)}.hero h1{font-size:clamp(58px,7.2vw,108px);line-height:.88;margin-top:24px;max-width:650px}.hero h1 span{display:block}.hero h1 span:nth-child(2){font-style:italic;color:var(--navy)}.hero p{max-width:400px;color:var(--muted);font-size:14px;margin-top:28px}.hero-scroll{position:absolute;left:4.5vw;bottom:17px;color:var(--muted);font:9px 'Work Sans';letter-spacing:.1em;text-transform:uppercase}.hero-scroll:before{content:'';display:inline-block;width:30px;height:1px;background:var(--tan);vertical-align:3px;margin-right:9px}
+section{padding:125px 4.5vw}.section-head{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:45px}.section-head-text{max-width:700px}.section-head h2{font-size:clamp(40px,5vw,72px);line-height:.95;margin-top:12px}.section-head p{max-width:480px;color:var(--muted);font-size:14px;margin-top:17px}.section-kicker{color:var(--ember)}.see-all{display:none}.gallery-preview{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:minmax(100px,8vw);gap:13px}.gallery-preview figure{position:relative;overflow:hidden;background:var(--paper);cursor:zoom-in}.gallery-preview figure img{height:100%;object-fit:cover;transition:transform .8s var(--ease),filter .8s ease}.gallery-preview figure:hover img{transform:scale(1.045);filter:saturate(1.06)}.gallery-preview figure:after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(7,29,54,.72),transparent 43%);opacity:0;transition:.35s}.gallery-preview figure:hover:after{opacity:1}.gallery-preview .t0{grid-column:span 7;grid-row:span 5}.gallery-preview .t1{grid-column:span 5;grid-row:span 3}.gallery-preview .t2{grid-column:span 5;grid-row:span 2}.gallery-preview .t3{grid-column:span 4;grid-row:span 3}.gallery-preview .t4{grid-column:span 4;grid-row:span 3}.gallery-preview .t5{grid-column:span 4;grid-row:span 3}.gallery-preview figcaption{position:absolute;z-index:2;left:16px;bottom:14px;color:#fff;opacity:0;transition:.35s;font:12px 'Fraunces',serif}.gallery-preview figure:hover figcaption{opacity:1}.gallery-empty{color:var(--muted);font-style:italic}.index{font:600 10px 'Work Sans';letter-spacing:.1em;text-transform:uppercase;color:var(--tan);white-space:nowrap;flex-shrink:0}
+#nature,#sunsets{background:var(--cream)}#nature .gallery-preview,#sunsets .gallery-preview{margin-top:5px}
+#prizes{background:var(--paper)}.spotlight{display:grid;grid-template-columns:1fr 150px;gap:13px;height:610px}.spotlight-stage{position:relative;overflow:hidden;background:var(--navy2)}.spotlight-stage img{height:100%;object-fit:cover;opacity:0;transition:opacity .4s}.spotlight-stage img.active{opacity:1}.spotlight-caption{position:absolute;left:0;right:0;bottom:0;padding:60px 22px 20px;background:linear-gradient(to top,rgba(7,29,54,.85),transparent);color:white}.spotlight-rail{display:flex;flex-direction:column;gap:10px;overflow:auto}.spotlight-rail img{height:113px;object-fit:cover;opacity:.55;outline:1px solid transparent;outline-offset:-2px;cursor:pointer}.spotlight-rail img.active{opacity:1;outline:2px solid var(--ember)}.prize-badge{position:absolute;top:14px;left:14px;background:var(--ember);color:white;padding:6px 9px;font:9px 'Work Sans';text-transform:uppercase;z-index:3}
+.collab{background:var(--navy);color:var(--cream);border:0}.collab-grid{display:grid;grid-template-columns:1fr .75fr;gap:9vw;max-width:1100px}.collab h2{font-size:clamp(45px,5vw,72px);line-height:.94}.collab p,.collab-points{color:rgba(244,238,227,.65);font-size:14px}.collab p{max-width:520px;margin-top:22px}.collab-points{list-style:none;margin-top:25px;display:grid;gap:10px}.collab-points li:before{content:'—';color:#e2b276;margin-right:9px}.collab-card{background:var(--cream);color:var(--brown);padding:30px}.collab-card h3{font-size:24px}.collab-links{display:grid;gap:10px;margin-top:20px}.collab-links a{border:1px solid var(--line);padding:14px 15px;display:flex;justify-content:space-between;font-size:12px;transition:.25s}.collab-links a:hover{border-color:var(--ember);color:var(--ember);transform:translateX(3px)}
+.about{max-width:760px}.about p{color:var(--muted);font-size:15px;margin-top:18px}footer{background:var(--navy2);color:var(--cream);padding:55px 4.5vw 25px;display:flex;justify-content:space-between;align-items:end;font-size:11px}footer div:first-child{font:35px Fraunces,serif}footer div:last-child{color:rgba(244,238,227,.5)}
+.overlay{position:fixed;inset:0;background:var(--cream);z-index:800;display:none;overflow:auto}.overlay.open{display:block}.overlay-head{position:sticky;top:0;z-index:2;padding:20px 5vw;background:rgba(244,238,227,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:20px}.overlay-back{border:0;background:none;font-size:12px;cursor:pointer;color:var(--muted)}.overlay-title{font-size:28px}.overlay-count{font:9px 'Work Sans';color:var(--tan);letter-spacing:.08em}.overlay-body{padding:35px 5vw 80px}.overlay-grid{columns:3;column-gap:13px}.overlay-grid figure{break-inside:avoid;margin-bottom:13px;cursor:zoom-in}.overlay-grid img{width:100%}.lightbox{position:fixed;inset:0;background:rgba(7,29,54,.97);z-index:900;display:none;align-items:center;justify-content:center;padding:5vw}.lightbox.open{display:flex}.lightbox img{max-width:90vw;max-height:88vh;width:auto;object-fit:contain}.lightbox-close{position:absolute;right:30px;top:24px;width:42px;height:42px;border:1px solid rgba(255,250,241,.3);border-radius:50%;background:none;color:var(--cream);font-size:24px;cursor:pointer}.lightbox-caption{position:absolute;bottom:22px;color:rgba(244,238,227,.7);font:9px 'Work Sans';letter-spacing:.1em;text-transform:uppercase}.reveal{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease),transform .8s var(--ease)}.reveal.in-view{opacity:1;transform:none}
+@media(max-width:800px){.section-head{flex-wrap:wrap}.see-all{margin-top:4px}.nav{padding:16px 5vw}.nav.scrolled{padding:11px 5vw}.nav-toggle{display:block;border:0;background:none;color:var(--brown);font-size:23px;z-index:2}.nav-links{position:fixed;inset:0 0 0 25%;background:var(--cream);display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:45px;gap:20px;transform:translateX(100%);transition:.45s var(--ease);box-shadow:-20px 0 60px rgba(0,0,0,.12)}.nav-links.open{transform:none}.nav-links a{font-size:15px}.hero{grid-template-columns:1fr;padding:105px 5vw 40px;gap:32px}.hero-bg{order:2;height:64vh;min-height:410px}.hero-content{order:1}.hero h1{font-size:clamp(57px,15vw,95px)}section{padding:85px 5vw}.section-head{margin-bottom:30px}.gallery-preview{grid-template-columns:repeat(2,1fr);grid-auto-rows:170px;gap:8px}.gallery-preview figure{grid-column:span 1!important;grid-row:span 1!important}.gallery-preview .t0{grid-column:span 2!important;grid-row:span 2!important}.spotlight{grid-template-columns:1fr;height:auto}.spotlight-stage{height:65vh;min-height:400px}.spotlight-rail{flex-direction:row;overflow-x:auto}.spotlight-rail img{width:105px;height:80px;flex-shrink:0}.collab-grid{grid-template-columns:1fr;gap:45px}.overlay-grid{columns:2}.about{max-width:none}footer{padding:45px 5vw;display:block}footer div:last-child{margin-top:30px}}
+@media(max-width:500px){.hero-bg{height:57vh;min-height:360px}.gallery-preview{grid-auto-rows:135px}.section-head h2{font-size:42px}.overlay-grid{columns:1}.overlay-title{font-size:22px}.overlay-head{padding:16px 5vw;gap:14px}.collab-card{padding:22px}}
+</style></head><body><div class="grain"></div>
+<div class="cursor-pill" id="cursorPill">View <span>→</span></div>
+<button class="back-top" id="backTop" aria-label="Back to top">↑</button>
+<nav class="nav" id="nav"><div class="nav-brand">Wanderlens</div><button class="nav-toggle" id="navToggle">☰</button><div class="nav-links" id="navLinks"><a href="#shots" data-section="shots">Work</a><a href="#nature" data-section="nature">Collections</a><a href="#sunsets" data-section="sunsets">Golden Hour</a><a href="#prizes" data-section="prizes">Awards</a><a href="#about" data-section="about">About</a><a href="#collaborate" data-section="collaborate" class="nav-cta">Collaborate</a></div></nav>
+<header class="hero" id="hero"><div class="hero-bg" id="heroBg"></div><div class="hero-content"><div class="hero-eyebrow">Travel &amp; Location Photography</div><h1><span>Places, held</span><span>still for a moment.</span></h1><p>I travel light, shoot honest, and leave with photographs that make a place look like itself on its best morning.</p></div><div class="hero-scroll">Scroll to explore</div></header>
+<section id="shots"><div class="section-head reveal"><div class="section-head-text"><div class="section-kicker">01 / Selected Work</div><h2>A visual record of being there.</h2><p>No single theme. Different places, different weather, different light — curated as one visual language.</p></div><button class="see-all" data-target="Some_Shots_Taken_By_Me">See all <span class="arrow">→</span></button></div><div class="gallery-preview" id="preview-shots"></div></section>
+<section class="collections" id="nature"><div class="section-head reveal"><div class="section-head-text"><div class="section-kicker">02 / Collection</div><h2>Divine Nature.</h2><p>Temples, rivers, forests and the quieter corners worth returning to.</p></div><button class="see-all" data-target="Divine_Nature">See all <span class="arrow">→</span></button></div><div class="gallery-preview" id="preview-nature"></div></section>
+<section id="sunsets"><div class="section-head reveal"><div class="section-head-text"><div class="section-kicker">03 / Collection</div><h2>Golden Hour.</h2><p>The ten minutes a day worth waiting for, wherever I happen to be.</p></div><button class="see-all" data-target="Sunrises_and_Sunsets">See all <span class="arrow">→</span></button></div><div class="gallery-preview" id="preview-sunsets"></div></section>
+<section id="prizes"><div class="section-head reveal"><div class="section-head-text"><div class="section-kicker">04 / Recognition</div><h2>Pictures that travelled further.</h2><p>A small edit of photographs that received recognition.</p></div><button class="see-all" data-target="Pics_That_Won_Prizes">See all <span class="arrow">→</span></button></div><div class="spotlight reveal" id="spotlight-prizes" style="display:none"><div class="spotlight-stage" id="spotlightStage"></div><div class="spotlight-rail" id="spotlightRail"></div></div><div id="prizes-empty"></div></section>
+<section class="collab" id="collaborate"><div class="collab-grid"><div class="reveal"><div class="section-kicker">05 / Collaborate</div><h2>Let's make a place worth remembering.</h2><p>I'd love to be invited to shoot your location. You get a genuine, curated collection of photographs; I get to tell another place's story.</p><ul class="collab-points"><li>Content-for-access or paid shoots</li><li>Themed, curated final collection</li><li>Usage rights discussed upfront</li><li>Usually delivered within a week</li></ul></div><div class="collab-card reveal"><h3>Get in touch</h3><div class="collab-links"><a href="https://instagram.com/" target="_blank">Instagram <span>↗</span></a><a href="mailto:your@email.com">Email <span>↗</span></a></div></div></div></section>
+<section id="about"><div class="about reveal"><div class="section-kicker">06 / About</div><h2 class="display" style="font-size:clamp(45px,6vw,78px);line-height:.92;margin-top:14px">Behind the camera.</h2><p>I'm a travel photographer based out of wherever I've landed that week. Most of what I shoot happens on trips — a sunrise I wasn't planning on, a temple I wandered into, a road I stopped the car for.</p><p>This site is a running record of those moments, and an open door to anywhere that'll have me next.</p></div></section>
+<footer><div>Wanderlens.</div><div>© <span id="year"></span> — Travel Photography</div></footer>
+<div class="overlay" id="overlay"><div class="overlay-head"><button class="overlay-back" id="overlayBack">← Back</button><div><div class="overlay-title display" id="overlayTitle"></div><div class="overlay-count" id="overlayCount"></div></div></div><div class="overlay-body"><div class="overlay-grid" id="overlayGrid"></div></div></div>
+<div class="lightbox" id="lightbox"><button class="lightbox-close" id="lightboxClose">×</button><button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous photo">‹</button><button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next photo">›</button><img id="lightboxImg" src="" alt=""><div class="lightbox-caption" id="lightboxCaption"></div></div>
+<script>
+  /* =========================================================
+     EDIT THIS: captions for the "Pics that Won Prizes" folder.
+     Key = photo number (matches Pics_That_Won_Prizes/1.jpg etc)
+  ========================================================= */
+  const PRIZE_CAPTIONS = { 1: "", 2: "", 3: "", 4: "", 5: "" };
+  const PREVIEW_COUNT = 6;
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const CATEGORIES = [
+    { folder: "Some_Shots_Taken_By_Me", previewId: "preview-shots",  label: "Some Shots I Captured", mosaicOffset: 0 },
+    { folder: "Divine_Nature",          previewId: "preview-nature", label: "Divine Nature",         mosaicOffset: 3 },
+    { folder: "Sunrises_and_Sunsets",   previewId: "preview-sunsets",label: "Sunrises & Sunsets",    mosaicOffset: 0 },
+    { folder: "Pics_That_Won_Prizes",   spotlight: true,             label: "Pics that Won Prizes", captions: PRIZE_CAPTIONS, badge: true }
+  ];
+
+  const MAX_CHECK = 60;
+  const STOP_AFTER_MISSES = 3;
+  const galleryData = {};
+
+  function loadImage(src){
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve(true);
+      img.onerror = () => resolve(false);
+      img.src = src;
+    });
+  }
+
+  async function discoverCategory(cat){
+    let misses = 0;
+    const items = [];
+    for (let i = 1; i <= MAX_CHECK; i++){
+      const path = `${cat.folder}/${i}.jpg`;
+      const ok = await loadImage(path);
+      if (!ok){ misses++; if (misses >= STOP_AFTER_MISSES) break; continue; }
+      misses = 0;
+      const caption = cat.captions && cat.captions[i] ? cat.captions[i] : '';
+      items.push({ num: i, path, caption });
+    }
+    galleryData[cat.folder] = items;
+    return items;
+  }
+
+  function makeFigure(item, cat, mosaicClass, items, idx){
+    const figure = document.createElement('figure');
+    if (mosaicClass) figure.className = mosaicClass;
+    if (cat.badge){
+      const badge = document.createElement('span');
+      badge.className = 'prize-badge';
+      badge.textContent = 'Award';
+      figure.appendChild(badge);
+    }
+    const img = document.createElement('img');
+    img.src = item.path; img.loading = 'lazy'; img.alt = `${cat.label} photo ${item.num}`;
+    figure.appendChild(img);
+    if (item.caption){
+      const cap = document.createElement('figcaption');
+      cap.textContent = item.caption;
+      figure.appendChild(cap);
+    }
+    figure.addEventListener('click', () => openLightbox(items || [item], idx != null ? idx : 0));
+    attachCursorPill(figure);
+    return figure;
+  }
+
+  async function renderMosaic(cat){
+    const items = await discoverCategory(cat);
+    const previewEl = document.getElementById(cat.previewId);
+    const seeAllBtn = document.querySelector(`.see-all[data-target="${cat.folder}"]`);
+    if (items.length === 0){
+      previewEl.innerHTML = `<p class="gallery-empty">No photos yet in /${cat.folder} — add 1.jpg, 2.jpg... to fill this in.</p>`;
+      return;
+    }
+    const shown = items.slice(0, PREVIEW_COUNT);
+    shown.forEach((item, i) => {
+      const idx = (i + (cat.mosaicOffset || 0)) % 6;
+      const fig = makeFigure(item, cat, `t${idx}`, items, i);
+      fig.classList.add('reveal');
+      fig.style.transitionDelay = prefersReduced ? '0s' : `${i * 70}ms`;
+      previewEl.appendChild(fig);
+      revealObserver.observe(fig);
+    });
+    if (items.length > PREVIEW_COUNT && seeAllBtn){
+      seeAllBtn.style.display = 'inline-flex';
+      seeAllBtn.firstChild.textContent = `See all ${items.length} `;
+      seeAllBtn.addEventListener('click', () => openOverlay(cat));
+    }
+  }
+
+  async function renderSpotlight(cat){
+    const items = await discoverCategory(cat);
+    const wrap = document.getElementById('spotlight-prizes');
+    const emptyEl = document.getElementById('prizes-empty');
+    const seeAllBtn = document.querySelector(`.see-all[data-target="${cat.folder}"]`);
+    if (items.length === 0){
+      emptyEl.innerHTML = `<p class="gallery-empty">No photos yet in /${cat.folder} — add 1.jpg, 2.jpg... to fill this in.</p>`;
+      return;
+    }
+    wrap.style.display = 'grid';
+    const stage = document.getElementById('spotlightStage');
+    const rail = document.getElementById('spotlightRail');
+
+    items.forEach((item, i) => {
+      const img = document.createElement('img');
+      img.src = item.path;
+      if (i === 0) img.classList.add('active');
+      stage.appendChild(img);
+
+      if (item.caption && i === 0){
+        const cap = document.createElement('div');
+        cap.className = 'spotlight-caption';
+        cap.textContent = item.caption;
+        cap.id = 'spotlightCaption';
+        stage.appendChild(cap);
+      }
+      const badge = document.createElement('span');
+      badge.className = 'prize-badge';
+      badge.textContent = 'Award';
+      if (i === 0) stage.appendChild(badge);
+
+      const thumb = document.createElement('img');
+      thumb.src = item.path;
+      thumb.alt = `${cat.label} thumbnail ${item.num}`;
+      if (i === 0) thumb.classList.add('active');
+      thumb.addEventListener('click', () => {
+        stage.querySelectorAll('img').forEach((im, idx2) => im.classList.toggle('active', idx2 === i));
+        rail.querySelectorAll('img').forEach(t => t.classList.remove('active'));
+        thumb.classList.add('active');
+        const capEl = document.getElementById('spotlightCaption');
+        if (capEl) capEl.textContent = item.caption || '';
+      });
+      rail.appendChild(thumb);
+    });
+
+    if (items.length > 1 && seeAllBtn){
+      seeAllBtn.style.display = 'inline-flex';
+      seeAllBtn.firstChild.textContent = `See all ${items.length} `;
+      seeAllBtn.addEventListener('click', () => openOverlay(cat));
+    }
+  }
+
+  CATEGORIES.forEach(cat => cat.spotlight ? renderSpotlight(cat) : renderMosaic(cat));
+
+  /* Reveal-on-scroll observer */
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting){
+        entry.target.classList.add('in-view');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  /* Custom cursor pill (desktop only) */
+  const cursorPill = document.getElementById('cursorPill');
+  function attachCursorPill(el){
+    if (!cursorPill || window.matchMedia('(hover: none)').matches) return;
+    el.addEventListener('mouseenter', () => cursorPill.classList.add('show'));
+    el.addEventListener('mouseleave', () => cursorPill.classList.remove('show'));
+  }
+  if (cursorPill){
+    window.addEventListener('mousemove', (e) => {
+      cursorPill.style.left = e.clientX + 'px';
+      cursorPill.style.top = e.clientY + 'px';
+    });
+  }
+
+  /* Back-to-top */
+  const backTop = document.getElementById('backTop');
+  if (backTop){
+    window.addEventListener('scroll', () => backTop.classList.toggle('show', window.scrollY > 700));
+    backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: prefersReduced ? 'auto' : 'smooth' }));
+  }
+
+  /* Category overlay */
+  const overlay = document.getElementById('overlay');
+  const overlayGrid = document.getElementById('overlayGrid');
+  const overlayTitle = document.getElementById('overlayTitle');
+  const overlayCount = document.getElementById('overlayCount');
+
+  function openOverlay(cat){
+    overlayTitle.textContent = cat.label;
+    const items = galleryData[cat.folder] || [];
+    overlayCount.textContent = `${items.length} photo${items.length === 1 ? '' : 's'}`;
+    overlayGrid.innerHTML = '';
+    items.forEach((item, idx) => overlayGrid.appendChild(makeFigure(item, cat, null, items, idx)));
+    overlay.classList.add('open');
+    overlay.scrollTop = 0;
+    document.body.style.overflow = 'hidden';
+  }
+  function closeOverlay(){ overlay.classList.remove('open'); document.body.style.overflow = ''; }
+  document.getElementById('overlayBack').addEventListener('click', closeOverlay);
+
+  /* Lightbox (with prev/next through the current set) */
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxCaption = document.getElementById('lightboxCaption');
+  const lightboxPrev = document.getElementById('lightboxPrev');
+  const lightboxNext = document.getElementById('lightboxNext');
+  let lbSet = [];
+  let lbIndex = 0;
+
+  function showLightboxIndex(i){
+    if (!lbSet.length) return;
+    lbIndex = (i + lbSet.length) % lbSet.length;
+    const item = lbSet[lbIndex];
+    lightboxImg.src = item.path;
+    lightboxCaption.textContent = item.caption || '';
+    const multi = lbSet.length > 1;
+    if (lightboxPrev) lightboxPrev.style.display = multi ? 'grid' : 'none';
+    if (lightboxNext) lightboxNext.style.display = multi ? 'grid' : 'none';
+  }
+  function openLightbox(items, index){
+    lbSet = items || [];
+    lightbox.classList.add('open');
+    showLightboxIndex(index || 0);
+  }
+  function closeLightbox(){ lightbox.classList.remove('open'); lightboxImg.src = ''; }
+  document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+  if (lightboxPrev) lightboxPrev.addEventListener('click', (e) => { e.stopPropagation(); showLightboxIndex(lbIndex - 1); });
+  if (lightboxNext) lightboxNext.addEventListener('click', (e) => { e.stopPropagation(); showLightboxIndex(lbIndex + 1); });
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', (e) => {
+    if (lightbox.classList.contains('open')){
+      if (e.key === 'Escape') closeLightbox();
+      else if (e.key === 'ArrowLeft') showLightboxIndex(lbIndex - 1);
+      else if (e.key === 'ArrowRight') showLightboxIndex(lbIndex + 1);
+    } else if (e.key === 'Escape' && overlay.classList.contains('open')){
+      closeOverlay();
+    }
+  });
+
+  /* Nav: hash-free smooth scroll + active-section indicator + mobile toggle */
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
+
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const id = link.getAttribute('href').slice(1);
+      const target = document.getElementById(id);
+      if (target) target.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'start' });
+      navLinks.classList.remove('open');
+    });
+  });
+  // if the page was opened with a leftover #hash, honor it once then strip it from the address bar
+  if (location.hash){
+    const id = location.hash.slice(1);
+    const target = document.getElementById(id);
+    window.addEventListener('load', () => {
+      if (target) target.scrollIntoView({ behavior: 'auto', block: 'start' });
+      history.replaceState(null, '', location.pathname + location.search);
+    });
+  }
+
+  const navSectionLinks = document.querySelectorAll('.nav-links a[data-section]');
+  const sectionEls = Array.from(navSectionLinks).map(a => document.getElementById(a.dataset.section)).filter(Boolean);
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const link = document.querySelector(`.nav-links a[data-section="${entry.target.id}"]`);
+      if (!link) return;
+      if (entry.isIntersecting) {
+        navSectionLinks.forEach(a => a.classList.remove('active'));
+        link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+  sectionEls.forEach(el => sectionObserver.observe(el));
+
+  /* Hero background with subtle parallax */
+  (async function setHeroBg(){
+    const candidates = [
+      'Pics_That_Won_Prizes/1.jpg','Sunrises_and_Sunsets/1.jpg',
+      'Divine_Nature/1.jpg','Some_Shots_Taken_By_Me/1.jpg'
+    ];
+    for (const src of candidates){
+      if (await loadImage(src)){
+        document.getElementById('heroBg').style.backgroundImage = `url('${src}')`;
+        break;
+      }
+    }
+  })();
+  if (!prefersReduced){
+    const heroBg = document.getElementById('heroBg');
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (y < window.innerHeight) heroBg.style.transform = `translateY(${y * 0.15}px)`;
+    }, { passive: true });
+  }
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body></html>
